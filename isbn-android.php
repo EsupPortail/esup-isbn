@@ -22,7 +22,7 @@ if ($_GET["code"]) {
    <br>To scan code with your mobile camera you need to install free Barcode Scanner -app
    <br><a href="market://details?id=com.google.zxing.client.android"><img src="//zxing.appspot.com/img/badge.png"></a>
 </html>
-<?
+<?php
 }
 
 function search_aleph($code) {
@@ -58,3 +58,4 @@ function curl($url) {
   curl_close($ch);
   return $output;
 }
+?>
