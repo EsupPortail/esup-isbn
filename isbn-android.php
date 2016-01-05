@@ -12,7 +12,7 @@ if ($_GET["code"]) {
 ?>
 <html>
   <meta name="viewport" content="width=device-width">
-    <a href="<? echo $dest ?>">
+    <a href="<?php echo $dest ?>">
        <img src="//zxing.appspot.com/img/app.png">
        <br>scan barcode
    </a>
@@ -60,7 +60,7 @@ function search_flora($code) {
             Vous pouvez contacter un bibliothécaire à l'accueil ou <a href="http://documentation.univ-rouen.fr/reponse-a-distance-ubib-338833.kjsp" target="_blank">directement en ligne</a>
          </p>
           <meta name="viewport" content="width=device-width">
-            <a href="<? echo $dest ?>">
+            <a href="<?php echo $dest ?>">
                <img src="//zxing.appspot.com/img/app.png">
                <br>scan barcode
            </a>
