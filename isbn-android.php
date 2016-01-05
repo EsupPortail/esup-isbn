@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: text/html; charset=utf-8');
+
 $current_url = 'http://localhost/cgi-bin/isbn-android.php';
 $dest = "zxing://scan/?ret=" . urlencode($current_url . "?code={CODE}");
 
