@@ -1,11 +1,12 @@
 <?php
 
 $current_url = 'http://localhost/cgi-bin/isbn-android.php';
+$dest = "zxing://scan/?ret=" . urlencode($current_url . "?code={CODE}");
 
 if ($_GET["code"]) {
     header("Location: " . search_flora($_GET["code"]));
 } else {
-    $dest = "zxing://scan/?ret=" . urlencode($current_url . "?code={CODE}");
+
 ?>
 <html>
   <meta name="viewport" content="width=device-width">
@@ -48,7 +49,26 @@ function search_flora($code) {
         $result_url = 'http://flora.univ-rouen.fr/flora/jsp/index_view_direct.jsp?' . $m[4];
         return $result_url;
     } else {
-        echo "error, redirect url not found\n";
+?>
+
+        <html>
+         <p>
+            <b>Aucun réssulat.</b>
+            <hr/>
+            Vous pouvez contacter un bibliothécaire à l'accueil ou <a href="http://documentation.univ-rouen.fr/reponse-a-distance-ubib-338833.kjsp" target="_blank">directement en ligne</a>
+         </p>
+          <meta name="viewport" content="width=device-width">
+            <a href="<? echo $dest ?>">
+               <img src="//zxing.appspot.com/img/app.png">
+               <br>scan barcode
+           </a>
+           <p>
+           <br>To scan code with your mobile camera you need to install free Barcode Scanner -app
+           <br><a href="market://details?id=com.google.zxing.client.android"><img src="//zxing.appspot.com/img/badge.png"></a>
+        </html>
+        
+        
+<?php
         exit(0);
     }
 }
