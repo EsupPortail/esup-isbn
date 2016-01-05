@@ -1,14 +1,9 @@
 <?php
 
-//Configuration en fonction du SIGB :
-$aleph_base = 'http://sushi-new.univ-paris1.fr';
-$aleph_search_isbn_params = '/F/?pds_handle=GUEST&func=find-d&local_base=UPS01&find_code=ISBN&request=';
-//
-$current_url = 'http://area51.univ-paris1.fr/prigaux/isbn.php';
-//
+$current_url = 'http://localhost/cgi-bin/isbn-android.php';
 
 if ($_GET["code"]) {
-    header("Location: " . search_aleph($_GET["code"]));    
+    header("Location: " . search_flora($_GET["code"]));
 } else {
     $dest = "zxing://scan/?ret=" . urlencode($current_url . "?code={CODE}");
 ?>
@@ -25,28 +20,36 @@ if ($_GET["code"]) {
 <?php
 }
 
-function search_aleph($code) {
-    $search_url = $GLOBALS['aleph_base'] . $GLOBALS['aleph_search_isbn_params'] . $code;
+function search_flora($code) {
 
-    $html = curl($search_url);
+    $login_url = 'http://flora.univ-rouen.fr/flora/servlet/LoginServlet';
+    $ch=curl_init($login_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // get headers too with this line
+    curl_setopt($ch, CURLOPT_HEADER, 1);
+    $login_postfields = 'success=jsp%2Fsystem%2Fwin_main.jsp&failure=jsp%2Ferror.jsp&profile=anonymous&connectionSiteId=1&connectionSiteLabel=Site+1';
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $login_postfields);
+    $result = curl_exec($ch);
+    preg_match('/^Set-Cookie: JSESSIONID=([^;]*)/mi', $result, $cookies);
+    curl_close($ch);
 
-    if (preg_match("!<title>PDS SSO</title>!", $html)) {
-        if (preg_match("!url = '(.*)'!", $html, $m)) {        
-            $html = curl($m[1]);
-        } else {
-            echo "error, redirect url not found\n";
-            exit(0);
-        }
-    }
-    if (preg_match("!<title>Login </title>!", $html)) {
-        if (preg_match("!body onload = \"location = '/goto/(.*)'!", $html, $m)) {
-            $html = curl($m[1]);
-        }
-    }
-    if (preg_match("!http?://.*&set_number=\d+!", $html, $m)) {
-        return $m[0];
+        
+    $search_url = 'http://flora.univ-rouen.fr/flora/servlet/ActionFlowManager?confirm=action_confirm&forward=action_forward&action=search';
+    $search_postfields = 'SCD_VISIBLE=O&INDEX_LIV=default.UNIMARC.EAN&query=SIMPLE_ROUEN_PUBLIC&source=default&sysFormTagHidden=&ActionManagerInit=true&CRIT=' . $code;
+    $ch=curl_init($search_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $search_postfields);
+    $cookies_all = 'JSESSIONID=' . $cookies[1] . ';  FLORA_SESSION=1';
+    curl_setopt( $ch, CURLOPT_COOKIE, $cookies_all); 
+
+    $html = curl_exec($ch);
+    
+    if (preg_match("/sysDoAction\('(.*)', '(.*)', '(.*)', '(.*)'\).*/", $html, $m)) {
+        $result_url = 'http://flora.univ-rouen.fr/flora/jsp/index_view_direct.jsp?' . $m[4];
+        return $result_url;
     } else {
-        return $search_url;
+        echo "error, redirect url not found\n";
+        exit(0);
     }
 }
 
