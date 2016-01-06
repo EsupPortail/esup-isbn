@@ -32,8 +32,13 @@ if ($_GET["code"]) {
        <br>Scanner le code-barre du livre
    </a>
    <p>
-    <br>Pour scanner le code-barre du livre avec l'appareil photo de votre téléphone android, vous devez installer l'application gratuite "Barcode Scanner"
+    <br/>Pour scanner le code-barre du livre avec l'appareil photo de votre téléphone, vous devez peut-être installer une application pour ce faire.
+    <br/>
+   Pour Android l'application gratuite "Barcode Scanner" fonctionne bien :
    <br><a href="market://details?id=com.google.zxing.client.android"><img src="//zxing.appspot.com/img/badge.png"></a>
+    <br/>
+    Pour iOS (iPas, iPhone) l'application gratuite "Qrafter" fonctionne bien :
+   <br><a href="itms-apps://itunes.apple.com/app/id416098700"><img src="//devimages.apple.com.edgekey.net/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg"></a>    
 </html>
 
 <?php
