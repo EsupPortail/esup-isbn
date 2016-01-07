@@ -15,10 +15,10 @@ if ($_GET["code"]) {
   <meta name="viewport" content="width=device-width">
     <a href="<? echo $dest ?>">
        <img src="//zxing.appspot.com/img/app.png">
-       <br>scan barcode
+       <br>Scanner le code-barre du livre
    </a>
    <p>
-   <br>To scan code with your mobile camera you need to install free Barcode Scanner -app
+   <br>Pour scanner le code-barre du livre avec l'appareil photo de votre téléphone, vous devrez peut-être installer une application supplémentaire.
    <br><a href="market://details?id=com.google.zxing.client.android"><img src="//zxing.appspot.com/img/badge.png"></a>
 </html>
 <?php
