@@ -1,10 +1,9 @@
 <?php
 
 //Configuration en fonction du SIGB :
-$aleph_base = 'http://sushi-new.univ-paris1.fr';
-$aleph_search_isbn_params = '/F/?pds_handle=GUEST&func=find-d&local_base=UPS01&find_code=ISBN&request=';
-//
-$current_url = 'http://area51.univ-paris1.fr/prigaux/isbn.php';
+$aleph_base = 'http://bib.univ-lr.fr/client/bulr/search/detailnonmodal/ent:$002f$002fSD_ILS$002f156$002fSD_ILS:156155/one?qu=';
+$aleph_search_isbn_params = '&te=ILS';
+$current_url = 'https://survey.univ-lr.fr/test.php';
 //
 
 if ($_GET["code"]) {
@@ -26,8 +25,17 @@ if ($_GET["code"]) {
 }
 
 function search_aleph($code) {
-    $search_url = $GLOBALS['aleph_base'] . $GLOBALS['aleph_search_isbn_params'] . $code;
+    $search_url = $GLOBALS['aleph_base'] . $code . $GLOBALS['aleph_search_isbn_params'];
 
+	$timeout=5;
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, $search_url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+	curl_setopt($curl, CURLOPT_NOPROXY, '*');
+	// ... set others params and options ...
+	$data= curl_exec($curl);
+	
     $html = curl($search_url);
 
     if (preg_match("!<title>PDS SSO</title>!", $html)) {
