@@ -1,8 +1,8 @@
 <?php
 
 //Configuration en fonction du SIGB :
-$aleph_base = 'http://bib.univ-lr.fr/client/bulr/search/results?qu=';
-$aleph_search_isbn_params = '';
+$sirsi_base = 'http://bib.univ-lr.fr/client/bulr/search/results?qu=';
+$sirsi_search_isbn_params = '';
 $current_url = 'https://survey.univ-lr.fr/isbn-android.php';
 //
 
@@ -27,25 +27,29 @@ switch (true) {
 
 if ($_GET["code"]) {
 	header("Location: " . search_bib($_GET["code"]));
-    //header("Location: " . search_bib($_GET["code"]));    
 } else {
     $dest = "zxing://scan/?ret=" . urlencode($current_url . "?code={CODE}");
     ?>
     <html>
-       <meta name="viewport" content="width=device-width">
-       <a href="<? echo $dest ?>">
-       <img src="//zxing.appspot.com/img/app.png">
-       <br>Scanner le code-barre du livre
-       </a>
-       <p>
-       <br>Pour scanner le code-barre du livre avec l'appareil photo de votre téléphone, vous devrez peut-être installer une application supplémentaire.
-       <br><a href="<?php echo $app_href;?>"><img src="<?php echo $app_img;?>"></a>
+       <form action="isbn-android.php" method="get">
+          <meta name="viewport" content="width=device-width">
+          <a href="<? echo $dest ?>">
+          <img src="//zxing.appspot.com/img/app.png">
+          <br>Scanner le code-barre du livre
+          </a>
+          <br><br>Ou entrer le code ISBN :<input type=text name="code" size="20" maxlength="100">
+          <button type="submit">Disponible ?</button>
+          <p>
+          <br>
+          <br>Pour scanner le code-barre du livre avec l'appareil photo de votre téléphone, vous devrez peut-être installer une application supplémentaire.
+          <br><a href="<?php echo $app_href;?>"><img src="<?php echo $app_img;?>"></a>
+       </form>
     </html>
     <?php
 }
 
 function search_bib($code) {
-    $search_url = $GLOBALS['aleph_base'] . $code; // . $GLOBALS['aleph_search_isbn_params'];
+    $search_url = $GLOBALS['sirsi_base'] . $code; // . $GLOBALS['sirsi_search_isbn_params'];
 
     $timeout=5;
     $curl = curl_init();
@@ -59,6 +63,5 @@ function search_bib($code) {
     curl_close($curl);
     
     return $search_url;
-
 }
 ?>
