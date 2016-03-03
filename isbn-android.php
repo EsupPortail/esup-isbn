@@ -1,10 +1,16 @@
 <?php
 
-//Configuration en fonction du SIGB :
-$sirsi_base = 'http://bib.univ-lr.fr/client/bulr/search/results?qu=';
-$sirsi_search_isbn_params = '';
-$current_url = 'https://survey.univ-lr.fr/isbn-android.php';
+//Configuration en fonction de l'etablissement :
+# url permettant de connaitre la disponibilité de l'ouvrage (a recuperer sur le sudoc)
+# sous la forme : http://catalogue.insa-rouen.fr/cgi-bin/koha/opac-search.pl?idx=kw&q=PPN<code_ppn>
+$url_opac = '<code_ppn>';
+$url_scanisbn = 'https://Survey.univ-etab.fr/scan-isbn.php';
 //
+
+//web service Sudoc ISBN to PPN :
+$ws_isbntoppn = 'http://www.sudoc.fr/services/isbn2ppn/<code_isbn>&format=text/json';
+//proxy :
+$url_proxy = 'http://wwwcache.univ-lr.fr:3128';
 
 //User agent
 $ua = $_SERVER['HTTP_USER_AGENT'];
@@ -49,19 +55,50 @@ if ($_GET["code"]) {
 }
 
 function search_bib($code) {
-    $search_url = $GLOBALS['sirsi_base'] . $code; // . $GLOBALS['sirsi_search_isbn_params'];
 
+    $ppn= search_ppn($code);
+    $search_url=str_replace("<code_ppn>",$ppn,$GLOBALS['url_opac']);
+#
     $timeout=5;
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $search_url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
     curl_setopt($curl, CURLOPT_COOKIESESSION, true);
-    curl_setopt($curl, CURLOPT_NOPROXY, '*');
     // ... set others params and options ...
-    $data= curl_exec($curl);
+
+    #pour les eventuels pbs de proxy :
+    curl_setopt($curl, CURLOPT_PROXY, $url_proxy);
+
+    $data = curl_exec($curl);
     curl_close($curl);
-    
+
     return $search_url;
+}
+
+function search_ppn($code) {
+    $search_ppn=str_replace("<code_isbn>",$code,$GLOBALS['ws_isbntoppn']);
+
+    $timeout=5;
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $search_ppn);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+    // ... set others params and options ...
+
+    #pour les eventuels pbs de proxy :
+    curl_setopt($curl, CURLOPT_PROXY, $url_proxy);
+
+    #$result = curl_exec($curl);
+    $decod_result = json_decode(curl_exec($curl),true);
+
+    curl_close($curl);
+
+    $ppn=$decod_result['sudoc']['query']['result']['ppn'];
+    if (!$ppn){
+        $ppn=$decod_result['sudoc']['query']['result'][0]['ppn'];
+    }
+
+    return $ppn;
 }
 ?>
