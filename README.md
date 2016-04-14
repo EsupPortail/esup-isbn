@@ -3,6 +3,7 @@ Service mobile qui permet de connaitre la disponibilité d'un ouvrage dans un ou
 Pour interroger ces catalogues publics, il se base sur l'identifiants de l'ouvrage (ISBN) qui est, soit :
 + lu via le scanner mobile
 + saisi manuellement 
+
 Ce service fonctionne à la fois sur iPhone et sur Android.
 
 
