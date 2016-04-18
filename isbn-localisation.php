@@ -1,13 +1,7 @@
 <?php
-//Co]nfiguration en fonction de l'etablissement :
-$url_proxy = 'http://wwwcache.univ-lr.fr:3128';
-
-//web service Sudoc ISBN to PPN :
-$ws_isbntoppn = 'http://www.sudoc.fr/services/isbn2ppn/<code_isbn>&format=text/json';
 
 if ($_GET["ISBN"]) {
    $cod_isbn=$_GET["ISBN"];
-   //$cod_ppn=$_GET["PPN"];
 
    $fp = fopen ("localisation.js", "r"); 
    $contenu_du_fichier = fread ($fp, filesize('localisation.js')); 
@@ -111,7 +105,6 @@ function search_url($url,$type) {
 function search_ppn($code_isbn) {
 
     $search_ppn=str_replace("<code_isbn>",$code_isbn,$GLOBALS['ws_isbntoppn']);
-
     $timeout=5;
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $search_ppn);
@@ -119,14 +112,8 @@ function search_ppn($code_isbn) {
     curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
     // ... set others params and options ...
 
-    #pour les eventuels pbs de proxy :
-    curl_setopt($curl, CURLOPT_PROXY, $GLOBALS['url_proxy']);
-    //curl_setopt($curl, CURLOPT_PROXY, $url_proxy);
-
     $decod_result = json_decode(curl_exec($curl),true);
-
     curl_close($curl);
-
     $ppn=$decod_result['sudoc']['query']['result']['ppn'];
     if (!$ppn){
         $ppn=$decod_result['sudoc']['query']['result'][0]['ppn'];
