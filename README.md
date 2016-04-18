@@ -3,6 +3,7 @@ Service mobile qui permet de connaitre la disponibilité d'un ouvrage dans un ou
 Pour interroger ces catalogues publics, il se base sur l'identifiants de l'ouvrage (ISBN) qui est, soit :
 + lu via le scanner mobile
 + saisi manuellement 
+
 Ce service fonctionne à la fois sur iPhone et sur Android.
 
 
@@ -11,7 +12,7 @@ Créer un nouveau canal et appeler isbn-scan.php
 
 
 ## Configuration
-localisation.js :
+#localisation.js :
 Indiquer le ou les catalogues publics que ce service doit utiliser en jouant sur le champ 'select' (0/1) :
 ```
    {
@@ -20,6 +21,12 @@ Indiquer le ou les catalogues publics que ce service doit utiliser en jouant sur
     "type" : "ISBN",
     "select" : 1
    },
+```
+
+#isbn-scan.php
+Indiquer l'URL complète du fichier :
+```
+$url_scanisbn = 'https://your-domain/isbn-scan.php';
 ```
 
 
