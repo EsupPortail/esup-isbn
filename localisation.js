@@ -183,7 +183,7 @@
     "name" : "LA ROCHELLE BU",
     "URL" : "http://bib.univ-lr.fr/client/fr_FR/bulr/search/results?qu=<code>",
     "type" : "ISBN",
-    "select" : 1
+    "select" : 0
    },
    {
     "name" : "LAVAL - BU",
