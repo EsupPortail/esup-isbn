@@ -1,7 +1,7 @@
 <?php
 
-if ($_GET["ISBN"]) {
-   $cod_isbn=$_GET["ISBN"];
+if ($_GET["cod_isbn"]) {
+   $cod_isbn=$_GET["cod_isbn"];
 
    $fp = fopen ("localisation.js", "r"); 
    $contenu_du_fichier = fread ($fp, filesize('localisation.js')); 

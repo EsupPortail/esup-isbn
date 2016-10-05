@@ -23,7 +23,7 @@ switch (true) {
 
 if ($_GET["cod_isbn"]) {
     $cod_isbn=$_GET["cod_isbn"];
-    header("Location: ./isbn-localisation.php?ISBN=" . $cod_isbn);
+    header("Location: ./isbn-localisation.php?cod_isbn=" . $cod_isbn);
 } else {
     $dest = "zxing://scan/?ret=" . urlencode($url_scanisbn . "?cod_isbn={CODE}");
     ?>
